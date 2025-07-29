@@ -1,49 +1,212 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Anastasia Spangler - Siggraph 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .parent {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: 1fr repeat(2, 3fr) 1fr;
-            grid-column-gap: 5px;
-            grid-row-gap: 5px;
+        * {
+            margin: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: "Lucida Sans", sans-serif;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+    'header header header header header header'
+    'menu main main main main right'
+    'footer footer footer footer footer footer';
+            gap: 10px;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .grid-container > div {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .item1 {
+            grid-area: header;
+            background-color: rgba(27, 194, 188, 0.99);
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .item1 > h1 {
+            font-size: 40px;
+        }
+
+        .item2 {
+            grid-area: menu;
+        }
+
+        .item2 ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .item2 li {
+            padding: 8px;
+            margin-bottom: 7px;
+            background-color: #33b5e5;
+            color: #ffffff;
+        }
+
+        .item2 li:hover {
+            background-color: #0099cc;
+        }
+
+        .item3 {
+            grid-area: main;
+        }
+
+        .item3 > h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .item3 > p {
+            margin-bottom: 7px;
+        }
+
+        .item4 {
+            grid-area: right;
+            border: 2px solid #0099cc;
+            background-color: white;
+            padding: 15px;
+            color: #000000;
+        }
+
+        .item4 > h2 {
+            font-size: 20px;
+            padding-bottom: 10px;
+        }
+
+        .item4 li {
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .item5 {
+            grid-area: footer;
+            background-color: #0099cc;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .item1 {
+                grid-area: 1 / span 6;
+            }
+
+            .item2 {
+                grid-area: 2 / span 6;
+            }
+
+            .item3 {
+                grid-area: 3 / span 6;
+            }
+
+            .item4 {
+                grid-area: 4 / span 6;
+            }
+
+            .item5 {
+                grid-area: 5 / span 6;
+            }
+        }
+
+        @media only screen and (min-width: 600px) {
+            .item1 {
+                grid-area: 1 / span 6;
+            }
+
+            .item2 {
+                grid-area: 2 / span 1;
+            }
+
+            .item3 {
+                grid-area: 2 / span 4;
+            }
+
+            .item4 {
+                grid-area: 3 / span 6;
+            }
+
+            .item5 {
+                grid-area: 4 / span 6;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .item1 {
+                grid-area: 1 / span 8;
+            }
+
+            .item2 {
+                grid-area: 2 / span 1;
+            }
+
+            .item3 {
+                grid-area: 2 / span 4;
+            }
+
+            .item4 {
+                grid-area: 2 / span 2;
+            }
+
+            .item5 {
+                grid-area: 3 / span 6;
+            }
+        }
+
     </style>
 </head>
-<body style="font-family: Verdana, sans-serif">
-<div class="parent">
-    <div>
-        <h2>Anastasia Spangler</h2>
+<body>
+
+<div class="grid-container">
+
+    <div class="item1"><h1>Anastasia Spangler</h1><br><h5>SIGGRAPH 2025</h5></div>
+
+    <div class="item2">
+        <ul>
+            <li>Resume</li>
+            <li>Projects</li>
+        </ul>
     </div>
-    <div>
-        <h3>SIGGRAPH 2025</h3>
+
+    <div class="item3">
+        <h1>About Me</h1>
+        <p>I'm a senior at Seattle University, majoring in Computer Science. I have experience in graphics programming,
+            computer vision, using cloud-compute for training, and a lot more.</p>
+        <p><b>Internships</b><br>
+            AI Research Intern @ IBM Research<br>
+            Product Intern @ Wepay / Chase</p>
+        <p><b>Skills</b><br>
+        C++, OpenGL, Python, Fullstack Web Dev
+        </p>
+        <a href="#">Go to Post</a>
     </div>
-    <div><p>:)</p></div>
-    <div>
-        <p>Senior at Seattle University, graduating June 2026</p>
-        <a href="#">Full Resume</a>
+
+    <div class="item4">
+        <h2>Featured Project</h2>
+        <p>From drone footage, to a Gaussian Splat via gsplat library, trained on Paperspace instance.</p>
+        <div style="background-color: #33b5e5; padding: 5px; text-decoration: none">
+            <a href="Projects/drone_splat.html">Go to Post</a>
+        </div>
+        <div>
+            <iframe
+                    src="https://www.useblurry.com/reconstruction/ckpt_29999_rank0-oKBDcNmJ?embed=true"
+                    title="ckpt_29999_rank0"
+                    style="width: 100%; height: 100%; border: none"></iframe>
+        </div>
     </div>
-    <div>
-        <p>Skills</p>
-        <p>Courses</p>
-    </div>
-    <div>
-        <p>Interests & Hobbies</p>
-    </div>
-    <div>
-        <h3>Papers in the Wild</h3>
-    </div>
-    <div>
-        <h3>Papers in the Wild</h3>
-    </div>
-    <div>
-        <h3>Papers in the Wild</h3>
-    </div>
-    <div><p>Github</p></div>
+
 </div>
+
 </body>
 </html>

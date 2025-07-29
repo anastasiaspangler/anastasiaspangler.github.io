@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Lucida Sans", sans-serif;
+        }
+
+        .select-all-on-click {
+            -webkit-user-select: all; /* For WebKit browsers like Chrome, Safari */
+            -moz-user-select: all; /* For Mozilla Firefox */
+            -ms-user-select: all; /* For Internet Explorer/Edge */
+            user-select: all; /* Standard property */
+        }
+
+
+        .code-container {
+            background-color: lightslategray;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+
+
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+    'header header header header header header'
+    'menu main main main main right'
+    'footer footer footer footer footer footer';
+            gap: 10px;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .grid-container > div {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .item1 {
+            grid-area: header;
+            background-color: rgba(27, 194, 188, 0.99);
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .item1 > h1 {
+            font-size: 40px;
+        }
+
+        .item2 {
+            grid-area: menu;
+        }
+
+        .item2 ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .item2 li {
+            padding: 8px;
+            margin-bottom: 7px;
+            background-color: #33b5e5;
+            color: #ffffff;
+        }
+
+        .item2 li:hover {
+            background-color: #0099cc;
+        }
+
+        .item3 {
+            grid-area: main;
+        }
+
+        .item3 > h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .item3 > p {
+            margin-bottom: 7px;
+        }
+
+        .item4 > h3 {
+            font-size: 20px;
+            padding-bottom: 10px;
+        }
+
+        .item4 li {
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .item1 {
+                grid-area: 1 / span 6;
+            }
+
+            .item3 {
+                grid-area: 3 / span 6;
+            }
+        }
+
+        @media only screen and (min-width: 600px) {
+            .item1 {
+                grid-area: 1 / span 6;
+            }
+
+            .item3 {
+                grid-area: 2 / span 4;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .item1 {
+                grid-area: 1 / span 8;
+                margin-bottom: 10px;
+            }
+
+            .item3 {
+                grid-area: 2 / span 4;
+                margin-left: 75px;
+                margin-right: 75px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="grid-container" style="padding: 20px;">
+    <div class="div"
+         style="background-color: #33b5e5; width: 90%; position: absolute; text-align: center; color: white;"><h1>
+        Anastasia Spangler</h1><br><h5>SIGGRAPH 2025</h5></div>
+    <div style="width: 90%; position: absolute; margin-top: 100px">
+        <div>
+            <span style="background-color: orangered; color: white; padding: 5px"><a href="../siggraph.html" style="text-decoration: none; color: white">Back to Home</a></span><br><br>
+            <h1>Drone Capture to Gaussian Splat, trained on a Remote GPU</h1>
+            <hr>
+            <div>
+                <div>
+                    <iframe
+                            src="https://www.useblurry.com/reconstruction/ckpt_29999_rank0-oKBDcNmJ?embed=true"
+                            title="ckpt_29999_rank0"
+                            style="width: 100%; height: 100%; border: none"></iframe>
+                </div>
+            </div>
+            <br>
+            <p>When I first started this, I had no remote GPU experience, did not have the drone yet, and only had a
+                basic idea of what a Gaussian splat even was.</p><br>
+            <p>The circle mode of my DJI Neo was used to capture me at a public garden.</p>
+            <br>
+            <p>You'll need a paperspace instance and a connection to it working.</p><br>
+
+            <div>
+                <h2 style="color: #0099cc">Setup</h2><br>
+                <div style="padding-left: 40px;">
+                    <h3 style="color: #33b5e5">Locally</h3><br>
+                    <h3>Directory Expectation</h3><br>
+                    <p><b>Local Directory where Capture Lives</b><br>
+                    <div class="code-container select-all-on-click">
+                        <code>~/home/paperspace/data/drone_shots/circle_061625_1/scene</code></p>
+                    </div>
+                    <br>
+                    <h3>Checklist</h3>
+                    <ul>
+                        <li> Install requirements.txt for gsplat</li>
+                        <li> Proper directory structure &amp; naming</li>
+                        <li> Downsample Drone shots</li>
+                        <li> Run with viewer disabled (headless) &lt;- tooltip w defn</li>
+                    </ul>
+                    <br>
+                    <p><b>How to Downsample</b></p>
+                    <div class="code-container select-all-on-click">
+                            <pre><code>python3 rescale_dataset.py \
+  ~/data/drone_shots/circle_061625_1/scene 4 \
+  ~/data/drone_shots/circle_061625_1/scene-4</code></pre>
+                    </div>
+                    <br>
+                    <h3 style="color: #33b5e5">On your Paperspace Instance</h3>
+                    <br>
+                    <p><b>Install Some things from Source</b></p>
+                    <p>Installing pycolmap from source (Note: This is <em>not</em> the pip pycolmap package.)</p>
+                    <p><a href="https://github.com/trueprice/pycolmap"
+                          target="_blank">https://github.com/trueprice/pycolmap</a>
+                    </p>
+                    <p>Set Path : <span style="background-color: lightslategray"><code>export PYTHONPATH="$HOME/gsplat/pycolmap:$PYTHONPATH"</code></span>
+                    </p>
+                    <p><a href="https://github.com/rahul-goel/fused-ssim" target="_blank">https://github.com/rahul-goel/fused-ssim</a>
+                    </p><br>
+
+                    <p><b>Pip install some things</b></p>
+                    <div class="code-container select-all-on-click">
+            <pre><code>pip install torchmetrics
+pip install nerfview</code></pre>
+                    </div>
+                    <br>
+                    <p><b>Install Mesa offscreen libraries so COLMAP can create a headless GL context</b></p>
+                    <div class="code-container select-all-on-click">
+                            <pre><code>sudo apt-get update
+sudo apt-get install -y \
+  libosmesa6-dev libgl1-mesa-dev libegl1-mesa-dev</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <br>
+                <br>
+                <h2 style="color: #0099cc">Instructions</h2>
+                <div style="padding-left: 40px;">
+                    <div>
+                        <div>
+                            <br>
+                            <h3>Take a Circle Shot with Drone</h3><br>
+                            <p>I used the DJI Neo Circle mode.</p>
+
+                            <div class="code-container select-all-on-click">
+                    <pre><code>python3 rescale_dataset.py \
+  ~/data/drone_shots/circle_061625_1/scene 4 \
+  ~/data/drone_shots/circle_061625_1/scene-4</code></pre>
+                            </div>
+                            <br>
+                            <h3>Push Data to Paperspace</h3>
+                            <p><b>Remote</b></p>
+                            <div class="code-container select-all-on-click">
+                    <pre><code>
+                        mkdir data
+                        mkdir data/drone_shots
+                        mkdir data/drone_shots/&lt;folder for capture&gt;
+                        # mine is named circle_061925
+                        mkdir results</code></pre>
+                            </div>
+
+                            <b>Local</b>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>scp &lt;filename of video&gt; paperspace@&lt;paperspace ip&gt;:~/data/drone_shots/&lt;capture&gt;/</code></pre>
+                            </div>
+                            <br>
+                            <h2>COLMAP</h2>
+                            <br>
+                            <p><strong>instantngp colmap2nerf.py</strong><br>
+                                Copyright of Nvidia<br>
+                                Source: <a
+                                        href="https://github.com/NVlabs/instant-ngp/blob/master/docs/nerf_dataset_tips.md"
+                                        target="_blank">instant-ngp docs</a></p>
+
+                            <p>Goal is to have 100 to 150 frames. My video is 20s long and I used 6 FPS.</p>
+                            <br>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>python3 [path-to-instant-ngp]/scripts/colmap2nerf.py --video_in &lt;filename of video&gt; --video_fps 2 --run_colmap --aabb_scale 32</code></pre>
+                            </div>
+                            <br>
+                            <p>This is going to create a conflict with the headless environment. The process is going to
+                                fail at the
+                                end after the images have been processed. That's okay. We now have video parsing,
+                                directory
+                                setup,
+                                and feature
+                                extraction are done. We'll use another library to finish.</p><br>
+
+                            <p>If necessary, move <code>colmap.db</code> to the directory where the <code>.mov</code>
+                                and
+                                <code>images</code>
+                                folders are:</p>
+                            <div class="code-container select-all-on-click">
+                                    <pre><code>mv colmap.db data/drone_shots/&lt;capture&gt;/
+cd data/drone_shots/&lt;capture&gt;</code></pre>
+                            </div>
+                            <br>
+
+                            <h3>colmap library</h3>
+                            <div class="code-container select-all-on-click">
+                                    <pre><code>colmap feature_extractor \
+                  --database_path ~/data/drone_shots/&lt;capture&gt;/colmap.db \
+                  --image_path    ~/data/drone_shots/&lt;capture&gt;/images \
+                  --SiftExtraction.use_gpu false</code></pre>
+                            </div>
+
+                            <div class="code-container select-all-on-click">
+                                    <pre><code>colmap sequential_matcher \
+                  --database_path ~/data/drone_shots/&lt;capture&gt;/colmap.db \
+                  --SiftMatching.use_gpu false \
+                  --SiftMatching.guided_matching true</code></pre>
+                            </div>
+
+                            <p><strong>Summary:</strong> instant-ngp ran feature extraction on GPU, parsed the video
+                                into
+                                frames,
+                                and set up directory structure. Now, COLMAP is performing sequential image matching on
+                                the
+                                CPU.</p>
+                            <br>
+                            <p>The matching takes a while - great time to stretch or do a chore. Don't let your
+                                connection
+                                timeout!</p><br>
+
+                            <h3>Generate the Sparse 3D Model</h3>
+                            <p>Run the COLMAP mapper within the capture folder:</p>
+                            <div class="code-container select-all-on-click">
+                    <pre><code>mkdir scene
+                mkdir scene/sparse
+                colmap mapper \
+                  --database_path scene/colmap.db \
+                  --image_path    scene/images \
+                  --output_path   scene/sparse</code></pre>
+                            </div>
+
+                            <h3>Downsample Drone Shots</h3>
+                            <p>Drone footage is often 4k, which creates large files. I downscaled by 4 and got great
+                                results.</p>
+                            <p>Use <code>rescale_dataset.py</code> to create a downscaled copy:</p>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>python3 scripts/rescale_dataset.py \
+                  ~/data/drone_shots/&lt;capture&gt;/scene 4 \
+                  ~/data/drone_shots/&lt;capture&gt;/scene-4</code></pre>
+                            </div>
+                            <p>The last argument is the output directory.</p>
+                            <br>
+                            <h3>Training!</h3>
+                            <p>Create the results directory:</p>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>mkdir results/&lt;capture&gt;_ds4</code></pre>
+                            </div>
+                            <br>
+                            <p>From the top-level <code>gsplat</code> directory, ensure <code>pycolmap</code> is found:
+                            </p>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>export PYTHONPATH="${PWD}/pycolmap:${PYTHONPATH}"</code></pre>
+                            </div>
+                            <br>
+                            <p>Run <code>simple_trainer.py</code>. Set <code>data_factor</code> to 1 since we already
+                                downscaled.
+                            </p>
+                            <div class="code-container select-all-on-click">
+                            <pre><code>CUDA_VISIBLE_DEVICES=0 python3 examples/simple_trainer.py default \
+              --data_dir ~/data/drone_shots/&lt;capture&gt;/scene-4 \
+              --data_factor 1 \
+              --result_dir ~/results/&lt;results_dir&gt; \
+              --disable_viewer --disable_video</code></pre>
+                            </div>
+                            <br>
+                            <h3>Exporting to PLY</h3>
+                            <p><strong>Checkpoint path:</strong><br>
+                            <div class="code-container select-all-on-click">
+                                <code>/home/paperspace/results/&lt;result_dir&gt;/ckpts/&lt;highest
+                                    checkpt&gt;.pt</code>
+                            </div>
+                            </p>
+
+                            <p>Create an export directory and run the export script:</p>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>cd mkdir results/result_dir/export <br>cd gsplat<br>python3 export_scene.py \<br>--ckpt ~/results/result_dir/ckpts/ckpt_29999_rank0.pt \<br>--save_to ~/results/result_dir/exports/ckpt_29999_rank0.ply</code></pre>
+                            </div>
+
+                            <p>To copy the result to your local machine:</p>
+                            <div class="code-container select-all-on-click">
+                                <pre><code>scp paperspace@12.34.567.89:/home/paperspace/results/circle_061925_ds4/exports/ckpt_29999_rank0.ply .</code></pre>
+                            </div>
+
+                            <hr>
+                            <br><br><br><br><br><br>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+</body>
+</html>
