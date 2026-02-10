@@ -4,40 +4,313 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Psyche Inspired VR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem; background: #0a0a0f; color: #eee; }
-    h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.25rem; }
-    .subtitle { font-size: clamp(1rem, 2.5vw, 1.35rem); opacity: 0.85; margin-bottom: 2rem; font-weight: 400; }
-    .names { font-size: 1rem; opacity: 0.9; text-align: center; line-height: 1.8; margin-bottom: 1.25rem; }
-    .banner { width: 100%; max-width: 900px; border-radius: 8px; display: block; margin-bottom: 2rem; }
-    .description { width: 100%; max-width: 900px; font-size: 1rem; line-height: 1.7; opacity: 0.95; margin-bottom: 1.5rem; }
-    .gallery-link { width: 100%; max-width: 900px; font-size: 1rem; opacity: 0.95; }
-    .gallery-link a { color: #6b9eff; text-decoration: none; }
-    .gallery-link a:hover { text-decoration: underline; }
+    :root {
+      color-scheme: dark;
+      --bg: #05060d;
+      --ink: #eef2ff;
+      --muted: rgba(238, 242, 255, 0.72);
+      --panel: rgba(12, 18, 32, 0.78);
+      --panel-strong: rgba(16, 24, 44, 0.92);
+      --stroke: rgba(142, 170, 255, 0.18);
+      --accent: #62d0ff;
+      --accent-strong: #4ff1c6;
+      --shadow: 0 30px 70px rgba(2, 8, 30, 0.6);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(98, 208, 255, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(79, 241, 198, 0.16), transparent 50%),
+        radial-gradient(circle at 30% 80%, rgba(123, 88, 255, 0.14), transparent 55%),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Space Grotesk", system-ui, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-strong);
+    }
+
+    .page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 56px 24px 88px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.4rem);
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(98, 208, 255, 0.1);
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(98, 208, 255, 0.2), rgba(79, 241, 198, 0.3));
+      box-shadow: 0 12px 30px rgba(79, 241, 198, 0.2);
+      color: var(--ink);
+    }
+
+    .btn.ghost {
+      background: rgba(10, 14, 28, 0.8);
+      color: var(--muted);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-media {
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+
+    .banner {
+      width: 100%;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .media-caption {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 26px 28px;
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+
+    .panel strong {
+      color: var(--ink);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--panel-strong);
+      border: 1px solid var(--stroke);
+    }
+
+    .stat .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .stat .value {
+      font-size: 1.4rem;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .team span {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(98, 208, 255, 0.08);
+      border: 1px solid rgba(98, 208, 255, 0.16);
+    }
+
+    .disclaimer {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2,
+      .team {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Psyche Inspired VR</h1>
-  <p class="subtitle">art comes alive</p>
-  <p class="names">Anastasia Spangler, Jakob Balkovec, Daniel Sekits, Rehaan Cherukattil</p>
-  <img class="banner" src="images/banner_design.png" alt="Psyche Inspired VR banner">
-  <section class="description">
-    <p>Psyche Inspired VR immerses participants in artworks (2D, 3D, and motion-based) produced by over 130 undergraduate artists in NASA's Psyche Inspired program. Participants journey through a surreal landscape, engaging with the art via dialogue and interactions, and learn about NASA's mission to the metal asteroid Psyche.</p>
-    <p>The project will be distributed for Meta Quest Summer 2026.</p>
-  </section>
-  <section class="gallery-link">
-    <p>The web-based gallery is available at: <a href="https://psyche.ssl.berkeley.edu/galleries/artwork/" target="_blank">https://psyche.ssl.berkeley.edu/galleries/artwork/</a></p>
-  </section>
-  <section class="disclaimer">
-    <p>
-      <b>Disclaimer</b>
-      This work was created in partial fulfillment of Seattle University Capstone Course in Computer Science. 
-      The work is a result of the Psyche Student Collaborations component of NASA’s Psyche Mission (https://psyche.ssl.berkeley.edu). “Psyche: A Journey to a Metal World” [Contract number NNM16AA09C] is part of the NASA Discovery Program mission to solar system targets. 
-      Trade names and trademarks of ASU and NASA are used in this work for identification only. 
-      Their usage does not constitute an official endorsement, either expressed or implied, by Arizona State University or National Aeronautics and Space Administration. 
-      The content is solely the responsibility of the authors and does not necessarily represent the official views of ASU or NASA. (edited)
-    </p>
-  </section>
+  <main class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">NASA Psyche Inspired Program</p>
+        <h1>Psyche Inspired VR</h1>
+        <p class="subtitle">Art comes alive in a surreal, interactive journey to the metal world of Psyche.</p>
+        <div class="pill-row">
+          <span class="pill">Meta Quest release: Summer 2026</span>
+          <span class="pill">2D, 3D, and motion-based artworks</span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="https://psyche.ssl.berkeley.edu/galleries/artwork/" target="_blank" rel="noopener">Explore the web gallery</a>
+          <a class="btn ghost" href="#about">Project overview</a>
+        </div>
+      </div>
+      <figure class="hero-media">
+        <img class="banner" src="images/banner_design.png" alt="Psyche Inspired VR banner">
+        <figcaption class="media-caption">Concept banner for the Psyche Inspired VR experience.</figcaption>
+      </figure>
+    </header>
+
+    <section id="about" class="panel">
+      <div class="grid-2">
+        <div>
+          <p>
+            Psyche Inspired VR immerses participants in artworks produced by over 130 undergraduate artists in NASA's
+            Psyche Inspired program. Visitors journey through a surreal landscape, engage the art via dialogue and
+            interactions, and learn about NASA's mission to the metal asteroid Psyche.
+          </p>
+        </div>
+        <div class="stat">
+          <div class="label">Project Scale</div>
+          <div class="value">130+ student artists</div>
+        </div>
+        <div class="stat">
+          <div class="label">Mediums</div>
+          <div class="value">2D, 3D, motion-based</div>
+        </div>
+        <div class="stat">
+          <div class="label">Distribution</div>
+          <div class="value">Meta Quest, Summer 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <strong>Project Team</strong>
+      <div class="team">
+        <span>Anastasia Spangler</span>
+        <span>Jakob Balkovec</span>
+        <span>Daniel Sekits</span>
+        <span>Rehaan Cherukattil</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <strong>Web Gallery</strong>
+      <p>The web-based gallery is available at: <a href="https://psyche.ssl.berkeley.edu/galleries/artwork/" target="_blank" rel="noopener">https://psyche.ssl.berkeley.edu/galleries/artwork/</a></p>
+    </section>
+
+    <section class="panel disclaimer">
+      <strong>Disclaimer</strong>
+      <p>
+        This work was created in partial fulfillment of Seattle University Capstone Course in Computer Science.
+        The work is a result of the Psyche Student Collaborations component of NASA's Psyche Mission
+        (https://psyche.ssl.berkeley.edu). "Psyche: A Journey to a Metal World" [Contract number NNM16AA09C]
+        is part of the NASA Discovery Program mission to solar system targets. Trade names and trademarks of
+        ASU and NASA are used in this work for identification only. Their usage does not constitute an official
+        endorsement, either expressed or implied, by Arizona State University or National Aeronautics and Space
+        Administration. The content is solely the responsibility of the authors and does not necessarily represent
+        the official views of ASU or NASA.
+      </p>
+    </section>
+  </main>
 </body>
 </html>
